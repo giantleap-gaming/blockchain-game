@@ -1,0 +1,9 @@
+{
+  "components": ["PositionComponent", "EnergyComponent", "LastUpdatedTimeComponent"],
+  "systems": [
+    { "name": "ComponentDevSystem", "writeAccess": ["*"] },
+    { "name": "MoveSystem", "writeAccess": ["PositionComponent", "EnergyComponent", "LastUpdatedTimeComponent"] },
+    { "name": "MoveByTwoSystem", "writeAccess": ["PositionComponent", "EnergyComponent", "LastUpdatedTimeComponent"] },
+    { "name": "SpawnEntitySystem", "writeAccess": ["PositionComponent", "EnergyComponent", "LastUpdatedTimeComponent"] }
+  ]
+}
