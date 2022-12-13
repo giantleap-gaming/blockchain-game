@@ -17,8 +17,8 @@ import { FunctionFragment, Result } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
-export interface LastUpdatedTimeComponentInterface extends utils.Interface {
-  contractName: "LastUpdatedTimeComponent";
+export interface Uint32ComponentInterface extends utils.Interface {
+  contractName: "Uint32Component";
   functions: {
     "authorizeWriter(address)": FunctionFragment;
     "getEntities()": FunctionFragment;
@@ -129,13 +129,13 @@ export interface LastUpdatedTimeComponentInterface extends utils.Interface {
   events: {};
 }
 
-export interface LastUpdatedTimeComponent extends BaseContract {
-  contractName: "LastUpdatedTimeComponent";
+export interface Uint32Component extends BaseContract {
+  contractName: "Uint32Component";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: LastUpdatedTimeComponentInterface;
+  interface: Uint32ComponentInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import type {
-  HasChildComponent,
-  HasChildComponentInterface,
-} from "../HasChildComponent";
+  Uint32Component,
+  Uint32ComponentInterface,
+} from "../Uint32Component";
 
 const _abi = [
   {
@@ -16,6 +16,11 @@ const _abi = [
         internalType: "address",
         name: "world",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
       },
     ],
     stateMutability: "nonpayable",
@@ -308,15 +313,15 @@ const _abi = [
   },
 ];
 
-export class HasChildComponent__factory {
+export class Uint32Component__factory {
   static readonly abi = _abi;
-  static createInterface(): HasChildComponentInterface {
-    return new utils.Interface(_abi) as HasChildComponentInterface;
+  static createInterface(): Uint32ComponentInterface {
+    return new utils.Interface(_abi) as Uint32ComponentInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): HasChildComponent {
-    return new Contract(address, _abi, signerOrProvider) as HasChildComponent;
+  ): Uint32Component {
+    return new Contract(address, _abi, signerOrProvider) as Uint32Component;
   }
 }

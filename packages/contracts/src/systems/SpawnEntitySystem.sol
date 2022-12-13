@@ -21,40 +21,40 @@ uint256 constant coord02 = uint256(keccak256("01"));
 uint256 constant coord12 = uint256(keccak256("12"));
 uint256 constant coord22 = uint256(keccak256("22"));
 
-uint256 constant initialEnergy = 2;
-uint256 constant energyCap = 30;
-uint256 constant childCreationCost = 30;
-uint256 constant initialChildren = 0;
+uint32 constant initialEnergy = 5;
+uint32 constant energyCap = 30;
+uint32 constant childCreationCost = 30;
+uint32 constant initialChildren = 0;
 
-function getCurrentChildCount(HasChildComponent hasChildComponent, uint256 entity) view returns (uint256) {
+function getCurrentChildCount(HasChildComponent hasChildComponent, uint256 entity) view returns (uint32) {
   bytes memory currentChildCountBytes = hasChildComponent.getRawValue(entity);
-  return currentChildCountBytes.length == 0 ? 0 : abi.decode(currentChildCountBytes, (uint256));
+  return currentChildCountBytes.length == 0 ? 0 : abi.decode(currentChildCountBytes, (uint32));
 }
 
 function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
   view
-  returns (uint256)
+  returns (uint32)
 {
   bytes memory currentEntityLastUpdatedTimeBytes = lastUpdatedTimeComponent.getRawValue(lastUpdatedTimeEntity);
-  return currentEntityLastUpdatedTimeBytes.length == 0 ? 0 : abi.decode(currentEntityLastUpdatedTimeBytes, (uint256));
+  return currentEntityLastUpdatedTimeBytes.length == 0 ? 0 : abi.decode(currentEntityLastUpdatedTimeBytes, (uint32));
 }
 
 function calculateEnergy(
-  uint256 currentTime,
-  uint256 lastUpdatedTime,
-  uint256 currentEnergy,
-  uint256 nrgCap
-) pure returns (uint256) {
-  uint256 _timeDiffInSeconds = currentTime - lastUpdatedTime;
-  uint256 _energyIncrementValue = _timeDiffInSeconds; // +1 energy per second
-  uint256 _newEnergy = currentEnergy + _energyIncrementValue;
+  uint32 currentTime,
+  uint32 lastUpdatedTime,
+  uint32 currentEnergy,
+  uint32 nrgCap
+) pure returns (uint32) {
+  uint32 _timeDiffInSeconds = currentTime - lastUpdatedTime;
+  uint32 _energyIncrementValue = _timeDiffInSeconds; // +1 energy per second
+  uint32 _newEnergy = currentEnergy + _energyIncrementValue;
   _newEnergy = nrgCap < _newEnergy ? nrgCap : _newEnergy;
   return _newEnergy;
 }
 
-function getEnergyOfEntity(EnergyComponent energyComponent, uint256 energyEntity) view returns (uint256) {
+function getEnergyOfEntity(EnergyComponent energyComponent, uint256 energyEntity) view returns (uint32) {
   bytes memory currentEnergyBytes = energyComponent.getRawValue(energyEntity);
-  return currentEnergyBytes.length == 0 ? 0 : abi.decode(currentEnergyBytes, (uint256));
+  return currentEnergyBytes.length == 0 ? 0 : abi.decode(currentEnergyBytes, (uint32));
 }
 
 contract SpawnEntitySystem is System {
@@ -133,15 +133,15 @@ contract SpawnEntitySystem is System {
     if (parentEntity > 0) {
       require(hasChildComponent.getValue(parentEntity) == 0, "Parent Entity already has a child");
 
-      uint256 parentEntityLastUpdatedTime = getLastUpdatedTimeOfEntity(lastUpdatedTimeComponent, parentEntity);
-
-      if (block.timestamp > parentEntityLastUpdatedTime) {
-        uint256 currentEnergy = getEnergyOfEntity(energyComponent, parentEntity);
-        uint256 updatedEnergy = calculateEnergy(block.timestamp, parentEntityLastUpdatedTime, currentEnergy, energyCap);
+      uint32 parentEntityLastUpdatedTime = getLastUpdatedTimeOfEntity(lastUpdatedTimeComponent, parentEntity);
+      uint32 time = uint32(block.timestamp);
+      if (time > parentEntityLastUpdatedTime) {
+        uint32 currentEnergy = getEnergyOfEntity(energyComponent, parentEntity);
+        uint32 updatedEnergy = calculateEnergy(uint32(block.timestamp), parentEntityLastUpdatedTime, currentEnergy, energyCap);
         require(updatedEnergy == 30, "Not enough energy regenerated yet for parent entity");
         hasChildComponent.set(parentEntity, 1);
         energyComponent.set(parentEntity, updatedEnergy - childCreationCost); // 30 - 30 = 0
-        lastUpdatedTimeComponent.set(parentEntity, block.timestamp);
+        lastUpdatedTimeComponent.set(parentEntity, uint32(block.timestamp));
       }
     }
 
@@ -150,7 +150,7 @@ contract SpawnEntitySystem is System {
     ownedByComponent.set(entity, addressToEntity(msg.sender));
     energyComponent.set(entity, initialEnergy); // 30
     hasChildComponent.set(entity, initialChildren); // 0
-    lastUpdatedTimeComponent.set(entity, block.timestamp);
+    lastUpdatedTimeComponent.set(entity, uint32(block.timestamp));
 
     // Declare winners
     if (ownedByComponent.getEntitiesWithValue(addressToEntity(msg.sender)).length >= 3) {

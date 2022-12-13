@@ -15,6 +15,7 @@ export type { RegisterSystem } from "./RegisterSystem";
 export type { SpawnEntitySystem } from "./SpawnEntitySystem";
 export type { System } from "./System";
 export type { Uint256Component } from "./Uint256Component";
+export type { Uint32Component } from "./Uint32Component";
 export type { World } from "./World";
 
 export { ComponentDevSystem__factory } from "./factories/ComponentDevSystem__factory";
@@ -31,4 +32,5 @@ export { RegisterSystem__factory } from "./factories/RegisterSystem__factory";
 export { SpawnEntitySystem__factory } from "./factories/SpawnEntitySystem__factory";
 export { System__factory } from "./factories/System__factory";
 export { Uint256Component__factory } from "./factories/Uint256Component__factory";
+export { Uint32Component__factory } from "./factories/Uint32Component__factory";
 export { World__factory } from "./factories/World__factory";

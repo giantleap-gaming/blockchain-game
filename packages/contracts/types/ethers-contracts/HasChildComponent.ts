@@ -22,7 +22,7 @@ export interface HasChildComponentInterface extends utils.Interface {
   functions: {
     "authorizeWriter(address)": FunctionFragment;
     "getEntities()": FunctionFragment;
-    "getEntitiesWithValue(bytes)": FunctionFragment;
+    "getEntitiesWithValue(uint32)": FunctionFragment;
     "getRawValue(uint256)": FunctionFragment;
     "getSchema()": FunctionFragment;
     "getValue(uint256)": FunctionFragment;
@@ -32,7 +32,7 @@ export interface HasChildComponentInterface extends utils.Interface {
     "registerIndexer(address)": FunctionFragment;
     "registerWorld(address)": FunctionFragment;
     "remove(uint256)": FunctionFragment;
-    "set(uint256,uint256)": FunctionFragment;
+    "set(uint256,bytes)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "world()": FunctionFragment;
     "writeAccess(address)": FunctionFragment;
@@ -48,7 +48,7 @@ export interface HasChildComponentInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getEntitiesWithValue",
-    values: [BytesLike]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRawValue",
@@ -76,7 +76,7 @@ export interface HasChildComponentInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "set",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -164,13 +164,13 @@ export interface HasChildComponent extends BaseContract {
 
     getEntities(overrides?: CallOverrides): Promise<[BigNumber[]]>;
 
-    "getEntitiesWithValue(bytes)"(
-      value: BytesLike,
+    "getEntitiesWithValue(uint32)"(
+      value: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
 
-    "getEntitiesWithValue(uint256)"(
-      value: BigNumberish,
+    "getEntitiesWithValue(bytes)"(
+      value: BytesLike,
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
 
@@ -186,7 +186,7 @@ export interface HasChildComponent extends BaseContract {
     getValue(
       entity: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[number]>;
 
     has(entity: BigNumberish, overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -209,15 +209,15 @@ export interface HasChildComponent extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "set(uint256,uint256)"(
-      entity: BigNumberish,
-      value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     "set(uint256,bytes)"(
       entity: BigNumberish,
       value: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "set(uint256,uint32)"(
+      entity: BigNumberish,
+      value: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -238,13 +238,13 @@ export interface HasChildComponent extends BaseContract {
 
   getEntities(overrides?: CallOverrides): Promise<BigNumber[]>;
 
-  "getEntitiesWithValue(bytes)"(
-    value: BytesLike,
+  "getEntitiesWithValue(uint32)"(
+    value: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
-  "getEntitiesWithValue(uint256)"(
-    value: BigNumberish,
+  "getEntitiesWithValue(bytes)"(
+    value: BytesLike,
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
@@ -254,7 +254,7 @@ export interface HasChildComponent extends BaseContract {
     overrides?: CallOverrides
   ): Promise<[string[], number[]] & { keys: string[]; values: number[] }>;
 
-  getValue(entity: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  getValue(entity: BigNumberish, overrides?: CallOverrides): Promise<number>;
 
   has(entity: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
@@ -277,15 +277,15 @@ export interface HasChildComponent extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "set(uint256,uint256)"(
-    entity: BigNumberish,
-    value: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   "set(uint256,bytes)"(
     entity: BigNumberish,
     value: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "set(uint256,uint32)"(
+    entity: BigNumberish,
+    value: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -303,13 +303,13 @@ export interface HasChildComponent extends BaseContract {
 
     getEntities(overrides?: CallOverrides): Promise<BigNumber[]>;
 
-    "getEntitiesWithValue(bytes)"(
-      value: BytesLike,
+    "getEntitiesWithValue(uint32)"(
+      value: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    "getEntitiesWithValue(uint256)"(
-      value: BigNumberish,
+    "getEntitiesWithValue(bytes)"(
+      value: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
@@ -322,10 +322,7 @@ export interface HasChildComponent extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string[], number[]] & { keys: string[]; values: number[] }>;
 
-    getValue(
-      entity: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    getValue(entity: BigNumberish, overrides?: CallOverrides): Promise<number>;
 
     has(entity: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
@@ -339,15 +336,15 @@ export interface HasChildComponent extends BaseContract {
 
     remove(entity: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    "set(uint256,uint256)"(
-      entity: BigNumberish,
-      value: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     "set(uint256,bytes)"(
       entity: BigNumberish,
       value: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "set(uint256,uint32)"(
+      entity: BigNumberish,
+      value: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -371,13 +368,13 @@ export interface HasChildComponent extends BaseContract {
 
     getEntities(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "getEntitiesWithValue(bytes)"(
-      value: BytesLike,
+    "getEntitiesWithValue(uint32)"(
+      value: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "getEntitiesWithValue(uint256)"(
-      value: BigNumberish,
+    "getEntitiesWithValue(bytes)"(
+      value: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -414,15 +411,15 @@ export interface HasChildComponent extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "set(uint256,uint256)"(
-      entity: BigNumberish,
-      value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     "set(uint256,bytes)"(
       entity: BigNumberish,
       value: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "set(uint256,uint32)"(
+      entity: BigNumberish,
+      value: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -444,13 +441,13 @@ export interface HasChildComponent extends BaseContract {
 
     getEntities(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "getEntitiesWithValue(bytes)"(
-      value: BytesLike,
+    "getEntitiesWithValue(uint32)"(
+      value: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "getEntitiesWithValue(uint256)"(
-      value: BigNumberish,
+    "getEntitiesWithValue(bytes)"(
+      value: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -490,15 +487,15 @@ export interface HasChildComponent extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "set(uint256,uint256)"(
-      entity: BigNumberish,
-      value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     "set(uint256,bytes)"(
       entity: BigNumberish,
       value: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "set(uint256,uint32)"(
+      entity: BigNumberish,
+      value: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

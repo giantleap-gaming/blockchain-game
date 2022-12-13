@@ -50,9 +50,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "bytes",
+        internalType: "uint32",
         name: "value",
-        type: "bytes",
+        type: "uint32",
       },
     ],
     name: "getEntitiesWithValue",
@@ -69,9 +69,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "bytes",
         name: "value",
-        type: "uint256",
+        type: "bytes",
       },
     ],
     name: "getEntitiesWithValue",
@@ -133,9 +133,9 @@ const _abi = [
     name: "getValue",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint32",
         name: "",
-        type: "uint256",
+        type: "uint32",
       },
     ],
     stateMutability: "view",
@@ -233,9 +233,9 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
+        internalType: "bytes",
         name: "value",
-        type: "uint256",
+        type: "bytes",
       },
     ],
     name: "set",
@@ -251,9 +251,9 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "bytes",
+        internalType: "uint32",
         name: "value",
-        type: "bytes",
+        type: "uint32",
       },
     ],
     name: "set",

@@ -1,7 +1,7 @@
 {
-  "components": ["PositionComponent", "EnergyComponent", "LastUpdatedTimeComponent", "HasChildComponent", "OwnedByComponent"],
+  "components": ["PositionComponent", "EnergyComponent", "HasChildComponent", "OwnedByComponent"],
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
-    { "name": "SpawnEntitySystem", "writeAccess": ["PositionComponent", "EnergyComponent", "LastUpdatedTimeComponent", "HasChildComponent", "OwnedByComponent"] }
+    { "name": "SpawnEntitySystem", "writeAccess": ["PositionComponent", "EnergyComponent", "HasChildComponent", "OwnedByComponent"] }
   ]
 }
