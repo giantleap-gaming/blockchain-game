@@ -129,8 +129,10 @@ contract SpawnEntitySystem is System {
     bool entityAlreadyExists = positionComponent.has(entity);
     require(entityAlreadyExists != true, "Entity at this co-ordinate already exists");
 
+
     // parentEntity min energy Condition
     if (parentEntity > 0) {
+      require(ownedByComponent.getValue(parentEntity) == addressToEntity(msg.sender), "Parent Entity is not owned by user");
       require(hasChildComponent.getValue(parentEntity) == 0, "Parent Entity already has a child");
 
       uint256 parentEntityLastUpdatedTime = getLastUpdatedTimeOfEntity(lastUpdatedTimeComponent, parentEntity);
