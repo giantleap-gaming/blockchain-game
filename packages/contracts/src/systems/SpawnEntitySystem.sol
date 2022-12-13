@@ -17,7 +17,7 @@ uint256 constant coord20 = uint256(keccak256("20"));
 uint256 constant coord01 = uint256(keccak256("01"));
 uint256 constant coord11 = uint256(keccak256("11"));
 uint256 constant coord21 = uint256(keccak256("21"));
-uint256 constant coord02 = uint256(keccak256("01"));
+uint256 constant coord02 = uint256(keccak256("02"));
 uint256 constant coord12 = uint256(keccak256("12"));
 uint256 constant coord22 = uint256(keccak256("22"));
 
