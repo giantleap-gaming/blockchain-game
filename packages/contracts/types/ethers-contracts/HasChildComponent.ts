@@ -17,8 +17,8 @@ import { FunctionFragment, Result } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
-export interface ExampleComponentInterface extends utils.Interface {
-  contractName: "ExampleComponent";
+export interface HasChildComponentInterface extends utils.Interface {
+  contractName: "HasChildComponent";
   functions: {
     "authorizeWriter(address)": FunctionFragment;
     "getEntities()": FunctionFragment;
@@ -129,13 +129,13 @@ export interface ExampleComponentInterface extends utils.Interface {
   events: {};
 }
 
-export interface ExampleComponent extends BaseContract {
-  contractName: "ExampleComponent";
+export interface HasChildComponent extends BaseContract {
+  contractName: "HasChildComponent";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ExampleComponentInterface;
+  interface: HasChildComponentInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

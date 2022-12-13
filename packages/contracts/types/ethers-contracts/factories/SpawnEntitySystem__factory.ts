@@ -48,6 +48,11 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "parentEntity",
+        type: "uint256",
+      },
+      {
         internalType: "int32",
         name: "xPosition",
         type: "int32",
@@ -67,6 +72,19 @@ const _abi = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getWinner",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

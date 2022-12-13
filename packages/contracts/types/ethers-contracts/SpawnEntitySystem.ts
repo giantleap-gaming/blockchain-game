@@ -21,15 +21,17 @@ export interface SpawnEntitySystemInterface extends utils.Interface {
   contractName: "SpawnEntitySystem";
   functions: {
     "execute(bytes)": FunctionFragment;
-    "executeTyped(int32,int32)": FunctionFragment;
+    "executeTyped(uint256,int32,int32)": FunctionFragment;
+    "getWinner()": FunctionFragment;
     "owner()": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "execute", values: [BytesLike]): string;
   encodeFunctionData(
     functionFragment: "executeTyped",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "getWinner", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "execute", data: BytesLike): Result;
@@ -37,6 +39,7 @@ export interface SpawnEntitySystemInterface extends utils.Interface {
     functionFragment: "executeTyped",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getWinner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
 
   events: {};
@@ -76,10 +79,13 @@ export interface SpawnEntitySystem extends BaseContract {
     ): Promise<ContractTransaction>;
 
     executeTyped(
+      parentEntity: BigNumberish,
       xPosition: BigNumberish,
       yPosition: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    getWinner(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
   };
@@ -90,10 +96,13 @@ export interface SpawnEntitySystem extends BaseContract {
   ): Promise<ContractTransaction>;
 
   executeTyped(
+    parentEntity: BigNumberish,
     xPosition: BigNumberish,
     yPosition: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  getWinner(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -101,10 +110,13 @@ export interface SpawnEntitySystem extends BaseContract {
     execute(arguments: BytesLike, overrides?: CallOverrides): Promise<string>;
 
     executeTyped(
+      parentEntity: BigNumberish,
       xPosition: BigNumberish,
       yPosition: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getWinner(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
   };
@@ -118,10 +130,13 @@ export interface SpawnEntitySystem extends BaseContract {
     ): Promise<BigNumber>;
 
     executeTyped(
+      parentEntity: BigNumberish,
       xPosition: BigNumberish,
       yPosition: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    getWinner(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
   };
@@ -133,10 +148,13 @@ export interface SpawnEntitySystem extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     executeTyped(
+      parentEntity: BigNumberish,
       xPosition: BigNumberish,
       yPosition: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    getWinner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };

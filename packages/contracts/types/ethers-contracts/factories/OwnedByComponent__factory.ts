@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import type {
-  Uint32Component,
-  Uint32ComponentInterface,
-} from "../Uint32Component";
+  OwnedByComponent,
+  OwnedByComponentInterface,
+} from "../OwnedByComponent";
 
 const _abi = [
   {
@@ -16,11 +16,6 @@ const _abi = [
         internalType: "address",
         name: "world",
         type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
       },
     ],
     stateMutability: "nonpayable",
@@ -55,9 +50,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint32",
+        internalType: "bytes",
         name: "value",
-        type: "uint32",
+        type: "bytes",
       },
     ],
     name: "getEntitiesWithValue",
@@ -74,9 +69,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "bytes",
+        internalType: "uint256",
         name: "value",
-        type: "bytes",
+        type: "uint256",
       },
     ],
     name: "getEntitiesWithValue",
@@ -138,9 +133,9 @@ const _abi = [
     name: "getValue",
     outputs: [
       {
-        internalType: "uint32",
+        internalType: "uint256",
         name: "",
-        type: "uint32",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -238,9 +233,9 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "bytes",
+        internalType: "uint256",
         name: "value",
-        type: "bytes",
+        type: "uint256",
       },
     ],
     name: "set",
@@ -256,9 +251,9 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint32",
+        internalType: "bytes",
         name: "value",
-        type: "uint32",
+        type: "bytes",
       },
     ],
     name: "set",
@@ -313,15 +308,15 @@ const _abi = [
   },
 ];
 
-export class Uint32Component__factory {
+export class OwnedByComponent__factory {
   static readonly abi = _abi;
-  static createInterface(): Uint32ComponentInterface {
-    return new utils.Interface(_abi) as Uint32ComponentInterface;
+  static createInterface(): OwnedByComponentInterface {
+    return new utils.Interface(_abi) as OwnedByComponentInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): Uint32Component {
-    return new Contract(address, _abi, signerOrProvider) as Uint32Component;
+  ): OwnedByComponent {
+    return new Contract(address, _abi, signerOrProvider) as OwnedByComponent;
   }
 }

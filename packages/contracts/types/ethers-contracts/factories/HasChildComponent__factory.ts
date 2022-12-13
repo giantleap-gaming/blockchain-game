@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import type {
-  ExampleComponent,
-  ExampleComponentInterface,
-} from "../ExampleComponent";
+  HasChildComponent,
+  HasChildComponentInterface,
+} from "../HasChildComponent";
 
 const _abi = [
   {
@@ -308,15 +308,15 @@ const _abi = [
   },
 ];
 
-export class ExampleComponent__factory {
+export class HasChildComponent__factory {
   static readonly abi = _abi;
-  static createInterface(): ExampleComponentInterface {
-    return new utils.Interface(_abi) as ExampleComponentInterface;
+  static createInterface(): HasChildComponentInterface {
+    return new utils.Interface(_abi) as HasChildComponentInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ExampleComponent {
-    return new Contract(address, _abi, signerOrProvider) as ExampleComponent;
+  ): HasChildComponent {
+    return new Contract(address, _abi, signerOrProvider) as HasChildComponent;
   }
 }
