@@ -32,7 +32,7 @@ async function bootGame() {
 
     const params = new URLSearchParams(window.location.search);
     const worldAddress = params.get("worldAddress");
-    const privateKey = sessionStorage.getItem("burnerWallet");
+    const privateKey = Wallet.createRandom().privateKey;
     const chainIdString = params.get("chainId");
     const jsonRpc = params.get("rpc") || undefined;
     const wsRpc = params.get("wsRpc") || undefined; // || (jsonRpc && jsonRpc.replace("http", "ws"));

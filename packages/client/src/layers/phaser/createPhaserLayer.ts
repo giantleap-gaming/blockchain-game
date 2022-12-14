@@ -1,36 +1,64 @@
-import { namespaceWorld } from "@latticexyz/recs";
+import { createEntity, defineComponent, namespaceWorld, setComponent, Type } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
-import { createPositionSystem, createInputSystem } from "./systems";
-import { displayEnergyPositionSystem } from "./systems/displayEnergyPositionSystem";
+import { createMapSystem, createPositionSystem, createSelectSystem, energySystem } from "./systems";
 
-/**
- * The Phaser layer is responsible for rendering game objects to the screen.
- */
+
 export async function createPhaserLayer(network: NetworkLayer) {
-  // --- WORLD ----------------------------------------------------------------------
   const world = namespaceWorld(network.world, "phaser");
+  const selectAreaEntity = createEntity(world);
+  const energyEntity = createEntity(world);
+  const components = {
+    Selected:
+      defineComponent(
+        world,
+        { x: Type.Number, y: Type.Number, show: Type.Boolean },
+        { id: "Selection" }
+      ),
+    Energy:
+      defineComponent(
+        world,
+        { energy: Type.Number, show: Type.Boolean },
+        { id: "Energy-local" }
+      ),
+  };
 
-  // --- COMPONENTS -----------------------------------------------------------------
-  const components = {};
+  function selectArea(x: number, y: number, show: boolean) {
+    setComponent(components.Selected, selectAreaEntity, { x, y, show });
+  }
 
-  // --- PHASER ENGINE SETUP --------------------------------------------------------
+  function setEnergy(energy: number, show: boolean) {
+    setComponent(components.Energy, energyEntity, { energy: energy, show });
+    let newEnergy = energy;
+    if (show) {
+      const energyRegeneration = setInterval(() => {
+        newEnergy += 1
+        if (newEnergy >= 30) {
+          clearInterval(energyRegeneration);
+          newEnergy = 0
+        } else {
+          setComponent(components.Energy, energyEntity, { energy: newEnergy, show });
+        }
+      }, 1000)
+    }
+  }
+
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   world.registerDisposer(disposePhaser);
 
-  // --- LAYER CONTEXT --------------------------------------------------------------
   const context = {
     world,
     components,
     network,
     game,
     scenes,
+    api: { selectArea, setEnergy }
   };
 
-  // --- SYSTEMS --------------------------------------------------------------------
-  createPositionSystem(network, context);
-  createInputSystem(network, context);
-  displayEnergyPositionSystem(network, context)
+  createMapSystem(network, context)
+  createSelectSystem(network, context)
+  createPositionSystem(network, context)
+  energySystem(network, context)
   return context;
 }

@@ -15,9 +15,8 @@ export function createPositionSystem(network: NetworkLayer, phaser: PhaserLayer)
       Main: {
         objectPool,
         config,
-        phaserScene,
         maps: {
-          Main: { tileWidth, tileHeight },
+          Main: { tileWidth, tileHeight, },
         },
       },
     },
@@ -34,6 +33,8 @@ export function createPositionSystem(network: NetworkLayer, phaser: PhaserLayer)
       once: (gameObject) => {
         gameObject.setTexture(sprite.assetKey, sprite.frame);
         gameObject.setPosition(x, y);
+        gameObject.depth = 3
+
       },
     });
   });

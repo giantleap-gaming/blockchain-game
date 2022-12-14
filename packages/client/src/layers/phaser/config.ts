@@ -13,7 +13,6 @@ import {
 import overworldTileset from "./assets/tilesets/overworld-tileset.png";
 import mountainTileset from "./assets/tilesets/mountain-tileset.png";
 const ANIMATION_INTERVAL = 200;
-
 export const phaserConfig = {
   sceneConfig: {
     [Scenes.Main]: defineSceneConfig({
@@ -28,13 +27,33 @@ export const phaserConfig = {
             imagePath: "/atlases/sprites/",
           },
         },
+        [Assets.Box]: {
+          type: AssetType.Image,
+          key: Assets.Box,
+          path: "/atlases/sprites/box.png",
+        },
+        [Assets.Select]: {
+          type: AssetType.Image,
+          key: Assets.Box,
+          path: "/atlases/sprites/select.png",
+        },
+        [Assets.X]: {
+          type: AssetType.Image,
+          key: Assets.X,
+          path: "/atlases/sprites/x.png",
+        },
+        [Assets.O]: {
+          type: AssetType.Image,
+          key: Assets.O,
+          path: "/atlases/sprites/o.png",
+        }
       },
       maps: {
         [Maps.Main]: defineMapConfig({
-          chunkSize: TILE_WIDTH * 64, // tile size * tile amount
+          chunkSize: TILE_WIDTH * 32, // tile size * tile amount
           tileWidth: TILE_WIDTH,
           tileHeight: TILE_HEIGHT,
-          backgroundTile: [OverworldTileset.Plain, OverworldTileset.Brick1],
+          backgroundTile: [OverworldTileset.Plain],
           animationInterval: ANIMATION_INTERVAL,
           tileAnimations: OverworldTileAnimations,
           layers: {
@@ -73,7 +92,11 @@ export const phaserConfig = {
         },
         [Sprites.Donkey]: {
           assetKey: Assets.MainAtlas,
-          frame: "sprites/resources/wood.png",
+          frame: "sprites/workers/donkey.png",
+        },
+        [Sprites.Grass]: {
+          assetKey: Assets.OverworldTileset,
+          frame: "./assets/tilesets/overworld-tileset.png",
         },
         [Sprites.Soldier]: {
           assetKey: Assets.MainAtlas,

@@ -16,6 +16,10 @@ export enum Assets {
   OverworldTileset = "OverworldTileset",
   MountainTileset = "MountainTileset",
   MainAtlas = "MainAtlas",
+  Box = 'box',
+  X = 'x',
+  O = 'o',
+  Select = "select"
 }
 
 export enum Sprites {
@@ -27,9 +31,10 @@ export enum Sprites {
   EmberCrown,
   EscapePortal,
   Donkey,
+  SelectUI,
 }
 
-export enum Animations {}
+export enum Animations { }
 
 export const UnitTypeSprites: Record<number, Sprites> = {};
 

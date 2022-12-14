@@ -1,19 +1,14 @@
-import { createWorld } from "@latticexyz/recs";
+import { createWorld, defineComponent, EntityID, EntityIndex, Type, updateComponent } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
-import { createActionSystem, setupMUDNetwork, defineNumberComponent, defineCoordComponent } from "@latticexyz/std-client";
+import { createActionSystem, setupMUDNetwork, defineCoordComponent, defineNumberComponent } from "@latticexyz/std-client";
 import { defineLoadingStateComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
 import { BigNumber } from "ethers";
 
-/**
- * The Network layer is the lowest layer in the client architecture.
- * Its purpose is to synchronize the client components with the contract components.
- */
-export async function createNetworkLayer(config: GameConfig) {
-  console.log("Network config", config);
 
+export async function createNetworkLayer(config: GameConfig) {
   // --- WORLD ----------------------------------------------------------------------
   const world = createWorld();
 
@@ -21,9 +16,18 @@ export async function createNetworkLayer(config: GameConfig) {
   const components = {
     LoadingState: defineLoadingStateComponent(world),
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
-    Energy: defineNumberComponent(world, { id: "Energy", metadata: { contractId: "component.Energy" } }),
+    Energy: defineNumberComponent(world,
+      { id: "Energy", metadata: { contractId: "component.Energy" } }),
+    HasChild: defineComponent(world,
+      { value: Type.String }
+      , { id: "HasChild", metadata: { contractId: "component.HasChild" } }),
+    LastUpdatedTime: defineComponent(world,
+      { value: Type.String }
+      , { id: "LastUpdatedTime", metadata: { contractId: "component.LastUpdatedTime" } }),
+    OwnedBy: defineComponent(world,
+      { value: Type.String }
+      , { id: "OwnedBy", metadata: { contractId: "component.OwnedBy" } })
   };
-
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
     typeof components,
@@ -32,13 +36,9 @@ export async function createNetworkLayer(config: GameConfig) {
 
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
-
   // --- API ------------------------------------------------------------------------
-  function move(action: 1 | 2 | 3 | 4, firstTime: boolean) {
-    systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), action, firstTime);
-  }
-  function moveByTwo(action: 1 | 2 | 3 | 4) {
-    systems["system.MoveByTwo"].executeTyped(BigNumber.from(network.connectedAddress.get()), action);
+  function spawnEntity(x: number, y: number, entity: EntityID) {
+    systems["system.SpawnEntity"].executeTyped(BigNumber.from(entity), x, y);
   }
 
   // --- CONTEXT --------------------------------------------------------------------
@@ -51,7 +51,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { move, moveByTwo },
+    api: { spawnEntity },
     dev: setupDevSystems(world, encoders, systems),
   };
 
