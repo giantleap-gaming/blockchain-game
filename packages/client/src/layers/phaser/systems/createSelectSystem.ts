@@ -1,5 +1,5 @@
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineComponentSystem, EntityID } from "@latticexyz/recs";
+import { defineComponentSystem, EntityID, EntityIndex } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { Assets, Sprites } from "../constants";
 import { PhaserLayer } from "../types";
@@ -9,6 +9,12 @@ export function createSelectSystem(network: NetworkLayer, phaser: PhaserLayer) {
   world,
   api: {
    spawnEntity
+  },
+  components: {
+   Position
+  },
+  utils: {
+   getEntityIdAtPosition
   }
  } = network;
 
@@ -34,9 +40,14 @@ export function createSelectSystem(network: NetworkLayer, phaser: PhaserLayer) {
  const clickSub = input.click$.subscribe((p) => {
   const pointer = p as Phaser.Input.Pointer;
   const tilePos = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
-  spawnEntity(tilePos.x, tilePos.y, '0' as EntityID)
+  // spawnEntity(tilePos.x, tilePos.y, '0' as EntityID)
   selectArea(tilePos.x, tilePos.y, true)
-  setEnergy(0, true)
+  const entityID = getEntityIdAtPosition(tilePos.x, tilePos.y) as EntityID
+  if (entityID !== undefined) {
+   setEnergy(0, true)
+  } else {
+   setEnergy(0, false)
+  }
  });
  world.registerDisposer(() => clickSub?.unsubscribe());
 

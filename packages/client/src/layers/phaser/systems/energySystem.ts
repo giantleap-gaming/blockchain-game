@@ -19,11 +19,19 @@ export function energySystem(network: NetworkLayer, phaser: PhaserLayer) {
 
   defineComponentSystem(world, Energy, (update) => {
     const energy = update.value[0];
-    if (!energy?.show) return console.log('no energy selected');
-    grayEnergyBar.fillStyle(0x999999, 1);
-    grayEnergyBar.fillRect(1, -50, 90, 10);
-    currentEnergyBar.fillStyle(0x00ff00, 1);
-    currentEnergyBar.depth = 2
-    currentEnergyBar.fillRect(1, -50, energy?.energy, 10)
+    if (!energy?.show) {
+      grayEnergyBar.visible = false
+      currentEnergyBar.visible = false
+    } else {
+      grayEnergyBar.visible = true
+      currentEnergyBar.visible = true
+      grayEnergyBar.fillStyle(0x999999, 1);
+      grayEnergyBar.fillRect(1, -50, 30, 5);
+      if (energy?.energy) {
+        currentEnergyBar.fillStyle(0x00ff00, 1);
+        currentEnergyBar.depth = 2
+        currentEnergyBar.fillRect(1, -50, energy.energy, 5)
+      }
+    }
   })
 }

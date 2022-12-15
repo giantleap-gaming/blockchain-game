@@ -30,18 +30,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   function setEnergy(energy: number, show: boolean) {
     setComponent(components.Energy, energyEntity, { energy: energy, show });
-    let newEnergy = energy;
-    if (show) {
-      const energyRegeneration = setInterval(() => {
-        newEnergy += 1
-        if (newEnergy >= 30) {
-          clearInterval(energyRegeneration);
-          newEnergy = 0
-        } else {
-          setComponent(components.Energy, energyEntity, { energy: newEnergy, show });
-        }
-      }, 1000)
-    }
   }
 
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
