@@ -8,6 +8,8 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { HasChildComponent, ID as HasChildComponentID } from "../components/HasChildComponent.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
+import { initialEnergy, energyCap, childCreationCost, initialChildren } from "../constants.sol";
+import { calculateEnergy, getEnergyOfEntity, getLastUpdatedTimeOfEntity } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.SpawnEntity"));
 
@@ -20,42 +22,6 @@ uint256 constant coord21 = uint256(keccak256("21"));
 uint256 constant coord02 = uint256(keccak256("02"));
 uint256 constant coord12 = uint256(keccak256("12"));
 uint256 constant coord22 = uint256(keccak256("22"));
-
-uint256 constant initialEnergy = 2;
-uint256 constant energyCap = 30;
-uint256 constant childCreationCost = 30;
-uint256 constant initialChildren = 0;
-
-function getCurrentChildCount(HasChildComponent hasChildComponent, uint256 entity) view returns (uint256) {
-  bytes memory currentChildCountBytes = hasChildComponent.getRawValue(entity);
-  return currentChildCountBytes.length == 0 ? 0 : abi.decode(currentChildCountBytes, (uint256));
-}
-
-function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
-  view
-  returns (uint256)
-{
-  bytes memory currentEntityLastUpdatedTimeBytes = lastUpdatedTimeComponent.getRawValue(lastUpdatedTimeEntity);
-  return currentEntityLastUpdatedTimeBytes.length == 0 ? 0 : abi.decode(currentEntityLastUpdatedTimeBytes, (uint256));
-}
-
-function calculateEnergy(
-  uint256 currentTime,
-  uint256 lastUpdatedTime,
-  uint256 currentEnergy,
-  uint256 nrgCap
-) pure returns (uint256) {
-  uint256 _timeDiffInSeconds = currentTime - lastUpdatedTime;
-  uint256 _energyIncrementValue = _timeDiffInSeconds; // +1 energy per second
-  uint256 _newEnergy = currentEnergy + _energyIncrementValue;
-  _newEnergy = nrgCap < _newEnergy ? nrgCap : _newEnergy;
-  return _newEnergy;
-}
-
-function getEnergyOfEntity(EnergyComponent energyComponent, uint256 energyEntity) view returns (uint256) {
-  bytes memory currentEnergyBytes = energyComponent.getRawValue(energyEntity);
-  return currentEnergyBytes.length == 0 ? 0 : abi.decode(currentEnergyBytes, (uint256));
-}
 
 contract SpawnEntitySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
@@ -96,6 +62,10 @@ contract SpawnEntitySystem is System {
       getAddressById(components, LastUpdatedTimeComponentID)
     );
 
+    if(parentEntity == 0) {
+      require(ownedByComponent.getEntitiesWithValue(addressToEntity(msg.sender)).length == 0, "Need parent entity ID to create a child entity");
+    }
+
     uint256 entity;
 
     if (xPosition == 0 && yPosition == 0) {
@@ -129,7 +99,6 @@ contract SpawnEntitySystem is System {
     bool entityAlreadyExists = positionComponent.has(entity);
     require(entityAlreadyExists != true, "Entity at this co-ordinate already exists");
 
-
     // parentEntity min energy Condition
     if (parentEntity > 0) {
       require(ownedByComponent.getValue(parentEntity) == addressToEntity(msg.sender), "Parent Entity is not owned by user");
@@ -150,19 +119,67 @@ contract SpawnEntitySystem is System {
     Coord memory coord = Coord({ x: xPosition, y: yPosition });
     positionComponent.set(entity, coord);
     ownedByComponent.set(entity, addressToEntity(msg.sender));
-    energyComponent.set(entity, initialEnergy); // 30
-    hasChildComponent.set(entity, initialChildren); // 0
+    energyComponent.set(entity, initialEnergy);
+    hasChildComponent.set(entity, initialChildren);
     lastUpdatedTimeComponent.set(entity, block.timestamp);
 
     // Declare winners
     if (ownedByComponent.getEntitiesWithValue(addressToEntity(msg.sender)).length >= 3) {
+      // Old 3 player winner logic
       if (msg.sender == player1) {
-        winner = 1;
+        winner = 0; // should be '1' for 3 entities-creator win logic
+      }
+      if (msg.sender == player2) {
+        winner = 0; // should be '2' for 3 entities-creator win logic
       }
 
-      if (msg.sender == player2) {
-        winner = 2;
-      }
+      //
+      // NEW LOGIC BELOW. BUT KEEP CODE COMMENTED.
+      //
+      
+      // uint256 me = addressToEntity(msg.sender);
+      // struct CoOrdniates {
+      //   bool zeroZero;
+      //   bool oneZero;
+      //   bool twoZero;
+      //   bool zeroOne;
+      //   bool oneOne;
+      //   bool twoOne;
+      //   bool zeroTwo;
+      //   bool oneTwo;
+      //   bool twoTwo;
+      // }
+
+      // CoOrdniates.zeroZero = ownedByComponent.getValue(coord00) == me;
+      // CoOrdniates.oneZero = ownedByComponent.getValue(coord10) == me;
+      // CoOrdniates.twoZero = ownedByComponent.getValue(coord20) == me;
+      // CoOrdniates.zeroOne = ownedByComponent.getValue(coord01) == me;
+      // CoOrdniates.oneOne = ownedByComponent.getValue(coord11) == me;
+      // CoOrdniates.twoOne = ownedByComponent.getValue(coord21) == me;
+      // CoOrdniates.zeroTwo = ownedByComponent.getValue(coord02) == me;
+      // CoOrdniates.oneTwo = ownedByComponent.getValue(coord12) == me;
+      // CoOrdniates.twoTwo = ownedByComponent.getValue(coord22) == me;
+      
+      // if (
+      //     // horizontal win check
+      //     (CoOrdniates.zeroZero && CoOrdniates.oneZero && CoOrdniates.twoZero) ||
+      //     (CoOrdniates.zeroOne && CoOrdniates.oneOne && CoOrdniates.twoOne) ||
+      //     (CoOrdniates.zeroTwo && CoOrdniates.oneTwo && CoOrdniates.twoTwo) ||
+      //     // vertical win check
+      //     (CoOrdniates.zeroZero && CoOrdniates.zeroOne && CoOrdniates.zeroTwo) ||
+      //     (CoOrdniates.oneZero && CoOrdniates.oneOne && CoOrdniates.oneTwo) ||
+      //     (CoOrdniates.twoZero && CoOrdniates.twoOne && CoOrdniates.twoTwo) ||
+      //     // diagonal win check
+      //     (CoOrdniates.zeroZero && CoOrdniates.oneOne && CoOrdniates.twoTwo) ||
+      //     (CoOrdniates.zeroTwo && CoOrdniates.oneOne && CoOrdniates.twoZero)
+      //     ) {
+      //       if (msg.sender == player1) {
+      //         winner = 1;
+      //       } else {
+      //         winner = 2;
+      //       }
+      //   }
+      // }
     }
   }
 
