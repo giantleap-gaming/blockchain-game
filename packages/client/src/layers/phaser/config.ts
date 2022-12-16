@@ -34,8 +34,13 @@ export const phaserConfig = {
         },
         [Assets.Select]: {
           type: AssetType.Image,
-          key: Assets.Box,
+          key: Assets.Select,
           path: "/atlases/sprites/select.png",
+        },
+        [Assets.Hover]: {
+          type: AssetType.Image,
+          key: Assets.Hover,
+          path: "/atlases/sprites/hover.png",
         },
         [Assets.X]: {
           type: AssetType.Image,
@@ -53,7 +58,7 @@ export const phaserConfig = {
           chunkSize: TILE_WIDTH * 32, // tile size * tile amount
           tileWidth: TILE_WIDTH,
           tileHeight: TILE_HEIGHT,
-          backgroundTile: [OverworldTileset.Plain],
+          backgroundTile: [OverworldTileset.Grass],
           animationInterval: ANIMATION_INTERVAL,
           tileAnimations: OverworldTileAnimations,
           layers: {
@@ -74,10 +79,6 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "sprites/resources/gold.png",
         },
-        [Sprites.Container]: {
-          assetKey: Assets.MainAtlas,
-          frame: "sprites/resources/chest.png",
-        },
         [Sprites.GoldShrine]: {
           assetKey: Assets.MainAtlas,
           frame: "sprites/resources/gold.png",
@@ -93,14 +94,6 @@ export const phaserConfig = {
         [Sprites.Donkey]: {
           assetKey: Assets.MainAtlas,
           frame: "sprites/workers/donkey.png",
-        },
-        [Sprites.Grass]: {
-          assetKey: Assets.OverworldTileset,
-          frame: "./assets/tilesets/overworld-tileset.png",
-        },
-        [Sprites.Soldier]: {
-          assetKey: Assets.MainAtlas,
-          frame: "sprites/warriors/hero.png",
         },
       },
       animations: [],

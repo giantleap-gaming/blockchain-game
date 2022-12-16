@@ -19,7 +19,8 @@ export enum Assets {
   Box = 'box',
   X = 'x',
   O = 'o',
-  Select = "select"
+  Select = "select",
+  Hover = "hover"
 }
 
 export enum Sprites {

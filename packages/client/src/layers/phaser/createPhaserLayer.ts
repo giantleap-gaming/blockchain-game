@@ -1,35 +1,43 @@
-import { createEntity, defineComponent, namespaceWorld, setComponent, Type } from "@latticexyz/recs";
+import { createEntity, namespaceWorld } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
-import { createMapSystem, createPositionSystem, createSelectSystem, energySystem } from "./systems";
-
+import { airDetails, hover, oxygenDetails, select, waterDetails } from '../local/components'
+import { createMapSystem, hoverSystem, selectSystem } from '../local/systems';
+import { setHoverPosition, setSelectPosition } from '../local/local-api'
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const world = namespaceWorld(network.world, "phaser");
-  const selectAreaEntity = createEntity(world);
-  const energyEntity = createEntity(world);
-  const components = {
-    Selected:
-      defineComponent(
-        world,
-        { x: Type.Number, y: Type.Number, show: Type.Boolean },
-        { id: "Selection" }
-      ),
-    Energy:
-      defineComponent(
-        world,
-        { energy: Type.Number, show: Type.Boolean },
-        { id: "Energy-local" }
-      ),
-  };
 
-  function selectArea(x: number, y: number, show: boolean) {
-    setComponent(components.Selected, selectAreaEntity, { x, y, show });
+  // defining all the entity's
+  const airDetailsEntityId = createEntity(world)
+  const selectionEntityId = createEntity(world)
+  const hoverEntityId = createEntity(world)
+  const oxygenDetailsEntityId = createEntity(world)
+  const waterDetailsEntityId = createEntity(world)
+
+  //id's of all the components
+  const localIds = {
+    airDetailsEntityId,
+    selectionEntityId,
+    hoverEntityId,
+    oxygenDetailsEntityId,
+    waterDetailsEntityId,
   }
 
-  function setEnergy(energy: number, show: boolean) {
-    setComponent(components.Energy, energyEntity, { energy: energy, show });
+  // defining all the local components
+  const localComponents = {
+    AirDetails: airDetails(world),
+    Hover: hover(world),
+    OxygenDetails: oxygenDetails(world),
+    Select: select(world),
+    WaterDetails: waterDetails(world),
+  };
+
+  // defining all the local components api changes
+  const localApi = {
+    setHoverPosition,
+    setSelectPosition
   }
 
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -37,16 +45,17 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const context = {
     world,
-    components,
+    localComponents,
     network,
     game,
     scenes,
-    api: { selectArea, setEnergy }
+    localApi,
+    localIds
   };
 
   createMapSystem(network, context)
-  createSelectSystem(network, context)
-  createPositionSystem(network, context)
-  energySystem(network, context)
+  hoverSystem(network, context)
+  selectSystem(network, context)
+
   return context;
 }
