@@ -45,7 +45,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
  airDetailsChange(1, 1, true, oxygenDetailsEntityId, AirDetails)
  foodDetailsChange(4, 1, true, foodDetailsEntityId, FoodDetails)
  powerDetailsChange(7, 1, true, powerDetailsEntityId, PowerDetails)
- powerDetailsChange(7, 1, true, powerDetailsEntityId, PowerDetails)
 
  setCharMovePosition(2, 9, char1EntityId, Move)
  setCharMovePosition(7, 9, char2EntityId, Move)

@@ -11,6 +11,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const world = namespaceWorld(network.world, "phaser");
 
   // defining all the entity's
+  const unusedId = createEntity(world)
   const foodDetailsEntityId = createEntity(world)
   const oxygenDetailsEntityId = createEntity(world)
   const powerDetailsEntityId = createEntity(world)

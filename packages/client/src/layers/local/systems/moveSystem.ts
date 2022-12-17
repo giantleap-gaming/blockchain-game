@@ -1,5 +1,5 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineComponentSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
+import { defineComponentSystem, EntityIndex, getComponentValue, getComponentEntities, } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { Assets } from "../../phaser/constants";
@@ -17,10 +17,11 @@ export function moveSystem(network: NetworkLayer, phaser: PhaserLayer) {
     },
    },
   },
-  localComponents: { Move, Select },
+  localComponents: { Move, Select, AirDetails, FoodDetails, PowerDetails },
   localApi: {
    setCharMovePosition,
-   setSelectPosition
+   setSelectPosition,
+   getEntityIndexAtPosition
   },
   localIds: {
    selectionEntityId,
@@ -40,7 +41,12 @@ export function moveSystem(network: NetworkLayer, phaser: PhaserLayer) {
       if (keyboard.keyCode === 65) {
        const x = charEntityDetails?.x - 1
        const y = charEntityDetails?.y
-       if (x > -1 && y > -1 && x < 10 && y < 10) {
+       const charId = getEntityIndexAtPosition(x, y, Move)
+       const powerID = getEntityIndexAtPosition(x, y, PowerDetails)
+       const foodID = getEntityIndexAtPosition(x, y, FoodDetails)
+       const airID = getEntityIndexAtPosition(x, y, AirDetails)
+       const invalidedMoves = !powerID && !charId && !foodID && !airID
+       if (x > -1 && y > -1 && x < 10 && y < 10 && invalidedMoves) {
         setCharMovePosition(x, y, charIndex, Move)
         setSelectPosition(x, y, true, selectionEntityId, Select, selectedValues?.charSelectedEntityId)
        }
@@ -48,7 +54,12 @@ export function moveSystem(network: NetworkLayer, phaser: PhaserLayer) {
       if (keyboard.keyCode === 87) {
        const x = charEntityDetails?.x
        const y = charEntityDetails?.y - 1
-       if (x > -1 && y > -1 && x < 10 && y < 10) {
+       const charId = getEntityIndexAtPosition(x, y, Move)
+       const powerID = getEntityIndexAtPosition(x, y, PowerDetails)
+       const foodID = getEntityIndexAtPosition(x, y, FoodDetails)
+       const airID = getEntityIndexAtPosition(x, y, AirDetails)
+       const invalidedMoves = !powerID && !charId && !foodID && !airID
+       if (x > -1 && y > -1 && x < 10 && y < 10 && invalidedMoves) {
         setCharMovePosition(x, y, charIndex, Move)
         setSelectPosition(x, y, true, selectionEntityId, Select, selectedValues?.charSelectedEntityId)
        }
@@ -56,7 +67,12 @@ export function moveSystem(network: NetworkLayer, phaser: PhaserLayer) {
       if (keyboard.keyCode === 83) {
        const x = charEntityDetails?.x
        const y = charEntityDetails?.y + 1
-       if (x > -1 && y > -1 && x < 10 && y < 10) {
+       const charId = getEntityIndexAtPosition(x, y, Move)
+       const powerID = getEntityIndexAtPosition(x, y, PowerDetails)
+       const foodID = getEntityIndexAtPosition(x, y, FoodDetails)
+       const airID = getEntityIndexAtPosition(x, y, AirDetails)
+       const invalidedMoves = !powerID && !charId && !foodID && !airID
+       if (x > -1 && y > -1 && x < 10 && y < 10 && invalidedMoves) {
         setCharMovePosition(x, y, charIndex, Move)
         setSelectPosition(x, y, true, selectionEntityId, Select, selectedValues?.charSelectedEntityId)
        }
@@ -64,7 +80,12 @@ export function moveSystem(network: NetworkLayer, phaser: PhaserLayer) {
       if (keyboard.keyCode === 68) {
        const x = charEntityDetails?.x + 1
        const y = charEntityDetails?.y
-       if (x > -1 && y > -1 && x < 10 && y < 10) {
+       const charId = getEntityIndexAtPosition(x, y, Move)
+       const powerID = getEntityIndexAtPosition(x, y, PowerDetails)
+       const foodID = getEntityIndexAtPosition(x, y, FoodDetails)
+       const airID = getEntityIndexAtPosition(x, y, AirDetails)
+       const invalidedMoves = !powerID && !charId && !foodID && !airID
+       if (x > -1 && y > -1 && x < 10 && y < 10 && invalidedMoves) {
         setCharMovePosition(x, y, charIndex, Move)
         setSelectPosition(x, y, true, selectionEntityId, Select, selectedValues?.charSelectedEntityId)
        }
