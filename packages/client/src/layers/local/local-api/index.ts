@@ -1,2 +1,6 @@
 export { setHoverPosition } from './hoverChange'
 export { setSelectPosition } from './selectChange'
+export { airDetailsChange } from './airDetailsChange'
+export { foodDetailsChange } from './foodDetailsChange'
+export { powerDetailsChange } from './powerDetailsChange'
+export { setCharMovePosition, getEntityIdAtPosition, getEntityIndexAtPosition } from './setCharMovePosition'

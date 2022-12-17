@@ -1,5 +1,6 @@
 export { airDetails } from './airDetails';
-export { waterDetails } from './waterDetails';
-export { oxygenDetails } from './oxygenDetails';
+export { powerDetails } from './powerDetails';
+export { foodDetails } from './foodDetails';
 export { hover } from './hover'
 export { select } from './select'
+export { move } from './move'

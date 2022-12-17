@@ -14,7 +14,6 @@ export const Engine: React.FC<{
 }> = observer(({ mountReact, setLayers, customBootScreen }) => {
   const [mounted, setMounted] = useState(true);
   const [layers, _setLayers] = useState<Layers | undefined>();
-
   useEffect(() => {
     mountReact.current = (mounted: boolean) => setMounted(mounted);
     setLayers.current = (layers: Layers) => _setLayers(layers);

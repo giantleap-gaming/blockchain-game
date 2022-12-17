@@ -5,7 +5,6 @@ import { Assets } from "../../phaser/constants";
 import { PhaserLayer } from "../../phaser/types";
 
 export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
- const { utils: { getEntityIdAtPosition } } = network
  const {
   world,
   scenes: {
@@ -19,22 +18,28 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
    },
   },
   localComponents: {
-   Select
+   Select,
+   Move
   },
   localIds: {
    selectionEntityId
   },
   localApi: {
-   setSelectPosition
+   setSelectPosition,
+   getEntityIdAtPosition,
   }
  } = phaser;
 
 
  const clickSub = input.click$.subscribe((p) => {
   const pointer = p as Phaser.Input.Pointer;
-  const tilePos = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
-  setSelectPosition(tilePos.x, tilePos.y, true, selectionEntityId, Select)
-  const entityID = getEntityIdAtPosition(tilePos.x, tilePos.y) as EntityID;
+  const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+  if (x > -1 && y > -1 && x < 10 && y < 10) {
+   const charEntityID = getEntityIdAtPosition(x, y, Move, world) as EntityID;
+   if (charEntityID) {
+    setSelectPosition(x, y, true, selectionEntityId, Select, charEntityID)
+   }
+  }
   world.registerDisposer(() => clickSub?.unsubscribe());
 
 

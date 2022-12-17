@@ -20,7 +20,13 @@ export enum Assets {
   X = 'x',
   O = 'o',
   Select = "select",
-  Hover = "hover"
+  Hover = "hover",
+  air = "air",
+  power = "power",
+  food = "food",
+  Body = "body",
+  thruster = "thruster",
+  Char = "Char"
 }
 
 export enum Sprites {

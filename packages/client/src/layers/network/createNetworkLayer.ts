@@ -52,9 +52,7 @@ export async function createNetworkLayer(config: GameConfig) {
 
   function getEntityIdAtPosition(x: number, y: number): EntityID | undefined {
     const entityIndex = getEntityIndexAtPosition(x, y) as EntityIndex;
-
     return entityIndex ? world.entities[entityIndex] : undefined
-
   }
 
   // --- CONTEXT --------------------------------------------------------------------

@@ -56,7 +56,6 @@ export const ComponentRenderer: React.FC = observer(() => {
   const { UIComponents } = useEngineStore();
   const layers = useLayers();
   if (!layers) return null;
-
   return (
     <UIGrid>
       {filterNullishValues(

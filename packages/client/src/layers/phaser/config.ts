@@ -51,14 +51,44 @@ export const phaserConfig = {
           type: AssetType.Image,
           key: Assets.O,
           path: "/atlases/sprites/o.png",
-        }
+        },
+        [Assets.air]: {
+          type: AssetType.Image,
+          key: Assets.air,
+          path: "/atlases/sprites/air.png",
+        },
+        [Assets.power]: {
+          type: AssetType.Image,
+          key: Assets.power,
+          path: "/atlases/sprites/power.png",
+        },
+        [Assets.thruster]: {
+          type: AssetType.Image,
+          key: Assets.thruster,
+          path: "/atlases/sprites/thruster.png",
+        },
+        [Assets.Body]: {
+          type: AssetType.Image,
+          key: Assets.Body,
+          path: "/atlases/sprites/body.png",
+        },
+        [Assets.Char]: {
+          type: AssetType.Image,
+          key: Assets.Char,
+          path: "/atlases/sprites/char.png",
+        },
+        [Assets.food]: {
+          type: AssetType.Image,
+          key: Assets.food,
+          path: "/atlases/sprites/food.png",
+        },
       },
       maps: {
         [Maps.Main]: defineMapConfig({
           chunkSize: TILE_WIDTH * 32, // tile size * tile amount
           tileWidth: TILE_WIDTH,
           tileHeight: TILE_HEIGHT,
-          backgroundTile: [OverworldTileset.Grass],
+          backgroundTile: [OverworldTileset.Plain],
           animationInterval: ANIMATION_INTERVAL,
           tileAnimations: OverworldTileAnimations,
           layers: {
